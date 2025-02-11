@@ -1,4 +1,4 @@
-""" si_visitor.py """
+""" visitor.py """
 
 from arpeggio import PTNodeVisitor
 from collections import namedtuple
@@ -31,7 +31,7 @@ class ScenarioVisitor(PTNodeVisitor):
         # return items
 
     @classmethod
-    def visit_class_header(cls, node, children):
+    def visit_class_pop(cls, node, children):
         """ class_name class_attrs block_end """
         # name = ''.join(children)
         # return {'name': name }

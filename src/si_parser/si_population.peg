@@ -5,10 +5,10 @@ si_population = EOL* scenario class_pop* EOF
 
 // Scenario name
 scenario = scenario_name block_end
-scenario_name = 'scenario : ' name EOL*
+scenario_name = 'scenario : ' icaps_name EOL*
 
 // Class pop
-class_header = class_name class_attrs block_end
+class_pop = class_name class_attrs block_end
 class_name = 'class ' icaps_name EOL*
 class_attrs = col_name (' | ' col_name)* block_end
 col_name = icaps_name / rnum_list

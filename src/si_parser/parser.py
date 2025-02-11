@@ -1,7 +1,7 @@
-""" si_parser.py – Initial instance parser """
+""" parser.py – Initial instance parser """
 
-from si_parser.exceptions import *
-from si_parser.si_visitor import ScenarioVisitor, SIPopulation
+from si_parser.exceptions import SIGrammarFileOpen, SIInputFileOpen, SIInputFileEmpty, SIParseError
+from si_parser.visitor import ScenarioVisitor, SIPopulation
 from arpeggio import visit_parse_tree, NoMatch
 from arpeggio.cleanpeg import ParserPEG
 import os
