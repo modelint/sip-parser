@@ -1,7 +1,7 @@
 // Instance population
 
 // Population
-population = EOL* scenario class_pop* EOF
+si_population = EOL* scenario class_pop* EOF
 
 // Scenario name
 scenario = scenario_name block_end
@@ -31,7 +31,6 @@ delim = r'[ _]' // Delimiter used inside of names
 block_end = "--" EOL*  // Signifies end of a block (within section)
 
 // Whitespace and comments
-QUOTE = r"\'"
 EOL = SP* COMMENT? '\n' // end of line: Comments, blank lines, whitespace we can omit from the parser result
 COMMENT = '//' r'.*' // Comment slashes don't work if included in the regular expression for some reason
 SP = " "
