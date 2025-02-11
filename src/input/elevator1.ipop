@@ -1,4 +1,4 @@
-Scenario : Simple Elevator
+scenario : Simple Elevator
 --
 class Shaft
 ID | In service | R1
