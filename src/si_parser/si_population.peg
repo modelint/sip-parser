@@ -1,36 +1,13 @@
 // Instance population
 
-// Population
-si_population = EOL* scenario class_pop* EOF
-
-// Scenario name
-scenario = scenario_name block_end
-scenario_name = 'scenario : ' icaps_name EOL*
-
-// Class pop
-class_pop = class_name class_attrs block_end
-class_name = 'class ' icaps_name EOL*
-class_attrs = col_name (' | ' col_name)* block_end
-col_name = icaps_name / rnum_list
-rnum_list = rnum (', ' rnum)*
-
-// Instance block
-instance_block = row* block_end
-row = row_value (', ' row_value)*
-row_value = alias_name / val
-alias_name = '@' word
-
-// Words and delimiters
-word = iword / lword
-icaps_name = iword (delim word)*  // A name using initial caps only
-iword = r'[A-Z][A-Za-z0-9]*' // Initial cap word (used in Class and Subsystem names)
-lword = r'[a-z][a-z]*' // Lower case only word (used in relationship phrase)
-rnum = r'O?R[1-9][0-9]*' // Relationship number
-val = r'[^,\s][^,\t\n\r\f\v]*' // no commas or whitespace other than space char
-delim = r'[ _]' // Delimiter used inside of names
-block_end = "--" EOL*  // Signifies end of a block (within section)
-
-// Whitespace and comments
-EOL = SP* COMMENT? '\n' // end of line: Comments, blank lines, whitespace we can omit from the parser result
-COMMENT = '//' r'.*' // Comment slashes don't work if included in the regular expression for some reason
-SP = " "
+si_population = header instance_block+ EOF
+header = 'instances' EOL
+instance_block = row+ block_end
+row = '{ ' brace_val (SP brace_val)* ' }' EOL
+brace_val = '[' val ']'
+//comma_val =
+val = r'[^\t\n\r\f\v\[\]]+'
+//val = r'[^,\s\\]][^,\t\n\r\f\v]*'
+block_end = "--" EOL
+EOL = '\n'
+SP = ' '

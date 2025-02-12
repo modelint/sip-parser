@@ -1,0 +1,49 @@
+// Instance population
+
+si_population = instance_block EOF
+instance_block = row block_end
+row = val (', ' val)* EOL*
+
+ Population
+//si_population = EOL* scenario class_pop EOF
+
+// Scenario name
+scenario = scenario_name block_end
+scenario_name = 'scenario : ' icaps_name EOL*
+
+// Class pop
+class_pop = class_def instance_block
+//class_pop = class_def instance_block
+class_def = class_name class_attrs block_end
+class_name = 'class ' icaps_name EOL*
+class_attrs = col_name (' | ' col_name)* EOL*
+col_name = icaps_name / rnum_list
+rnum_list = rnum (', ' rnum)*
+
+ Instance block
+instance_block = row* block_end
+row = val EOL*
+row = alias_name? row_value (', ' row_value)* EOL*
+row_value = alias_name / val
+alias_name = '@' word ' : '
+
+ Words and delimiters
+word = iword / lword
+icaps_name = iword (delim word)*  // A name using initial caps only
+iword = r'[A-Z][A-Za-z0-9]*' // Initial cap word (used in Class and Subsystem names)
+lword = r'[a-z][a-z]*' // Lower case only word (used in relationship phrase)
+rnum = r'O?R[1-9][0-9]*' // Relationship number
+val = r'[A-Za-z0-9._+][A-Za-z0-9._+]*'
+
+val = r'[\S][\S]*'
+
+val = r'[^,\s]+[a-z]' // Also works
+val = r'[a-z][^,\s]+[a-z]' // Works
+val = r'[^,\s][^,\t\n\r\f\v]*' // no commas or whitespace other than space char
+delim = r'[ _]' // Delimiter used inside of names
+block_end = "--" EOL*  // Signifies end of a block (within section)
+
+// Whitespace and comments
+EOL = SP* COMMENT? '\n' // end of line: Comments, blank lines, whitespace we can omit from the parser result
+COMMENT = '//' r'.*' // Comment slashes don't work if included in the regular expression for some reason
+SP = " "
