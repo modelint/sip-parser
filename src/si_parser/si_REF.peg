@@ -27,7 +27,7 @@ row = alias_name? row_value (', ' row_value)* EOL*
 row_value = alias_name / val
 alias_name = '@' word ' : '
 
- Words and delimiters
+// Words and delimiters
 word = iword / lword
 icaps_name = iword (delim word)*  // A name using initial caps only
 iword = r'[A-Z][A-Za-z0-9]*' // Initial cap word (used in Class and Subsystem names)

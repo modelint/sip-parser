@@ -1,7 +1,7 @@
 """ parser.py – Initial instance parser """
 
 from si_parser.exceptions import SIGrammarFileOpen, SIInputFileOpen, SIInputFileEmpty, SIParseError
-from si_parser.visitor import ScenarioVisitor, SIPopulation
+from si_parser.visitor import ScenarioVisitor, Scenario
 from arpeggio import visit_parse_tree, NoMatch
 from arpeggio.cleanpeg import ParserPEG
 import os
@@ -73,7 +73,7 @@ class SIParser:
         return cls.parse()
 
     @classmethod
-    def parse(cls) -> SIPopulation:
+    def parse(cls) -> Scenario:
         """
         Parse the model file and return the content
         :return:  The abstract syntax tree content of interest

@@ -3,8 +3,8 @@
 from arpeggio import PTNodeVisitor
 from collections import namedtuple
 
-SIPopulation = namedtuple('SIPopulation_a', 'scenario instances')
-"""All data from scenario instance parse"""
+Scenario = namedtuple('Scenario', 'name classes')
+ClassModelPopulation = namedtuple('ClassModelPopulation', 'attr_names refs population')
 
 class ScenarioVisitor(PTNodeVisitor):
 
@@ -12,64 +12,86 @@ class ScenarioVisitor(PTNodeVisitor):
     @classmethod
     def visit_si_population(cls, node, children):
         """
-        EOL* scenario class_pop* EOF
+        EOL* scenario (class_def instance_block)+ EOF
         """
-        # scenario = children.results['scenario'][0]  # Required by si parser
-        # instances = children.results.get('instances', [])  # Optional section
-        # return SI_population(
-        #     subsystem=subsys_name, domain=domain_name,
-        #     classes=class_data, rels=rel_data if not rel_data else rel_data[0],
-        #     instances=None if not instances else instances
-        # )
-        pass
+        scenario_name = children[0]
+        cdict = dict()
+        # The first child element is the scenario name, we we excludd that
+        # and process columns (c) and instances (i) two at a time
+        it = iter(children[1:])  # Create an iterator and then zip it to get non-overlapping list element pairs
+        for c, i in zip(it, it):
+            cname = c[0]
+            attrs = c[1]['attr']
+            refs = c[1]['refs']
+            pop = list(i['instances'])
+            cdict[cname] = ClassModelPopulation(attr_names=attrs, refs=refs, population=pop)
+        return Scenario(name=scenario_name, classes=cdict)
 
     @classmethod
     def visit_scenario(cls, node, children):
         """ scenario_name block_end """
-        pass
-        # items = {k: v for c in children for k, v in c.items()}
-        # return items
+        return children[0]
 
     @classmethod
-    def visit_class_pop(cls, node, children):
+    def visit_class_def(cls, node, children):
         """ class_name class_attrs block_end """
-        # name = ''.join(children)
-        # return {'name': name }
-        pass
+        return children
 
     @classmethod
     def visit_class_attrs(cls, node, children):
         """ col_name (' | ' col_name)* block_end """
-        # return { 'alias': children[0] }
-        pass
+        attrs = [c for c in children if isinstance(c, str)]
+        refs = next((c for c in children if isinstance(c, list)), None)
+        items = {"attr": attrs, "refs": refs}
+
+        return items
 
     @classmethod
     def visit_col_name(cls, node, children):
-        """ col_name (' | ' col_name)* block_end """
+        """ rnum_list / icaps_name """
         # items = {k: v for d in children for k, v in d.items()}
         # return items
-        pass
+        return children[0]
 
     @classmethod
     def visit_rnum_list(cls, node, children):
         """ rnum (', ' rnum)* """
         # items = {k: v for d in children for k, v in d.items()}
         # return items
-        pass
+        return children
 
     @classmethod
     def visit_instance_block(cls, node, children):
         """ row* block_end """
         # name = ''.join(children)
         # return {'name': name }
-        pass
+        return {'instances': children}
 
     @classmethod
     def visit_row(cls, node, children):
         """ row_value (', ' row_value)* """
-        # name = ''.join(children)
-        # return {'name': name }
-        pass
+        return children
+
+    @classmethod
+    def visit_brace_val(cls, node, children):
+        """ '[' ival ']' """
+        return children[0]
+
+    @classmethod
+    def visit_at_val(cls, node, children):
+        """ '@' word """
+        return { 'ref to': children[0] }
+
+    @classmethod
+    def visit_val(cls, node, children):
+        """ row_value (', ' row_value)* """
+        return children[0]
+
+    @classmethod
+    def visit_class_name(cls, node, children):
+        """ icaps_name """
+        return children[0]
+        # return { 'class': children[0] }
 
     @classmethod
     def visit_icaps_name(cls, node, children):
