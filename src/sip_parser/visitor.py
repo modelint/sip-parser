@@ -69,8 +69,10 @@ class ScenarioVisitor(PTNodeVisitor):
 
     @classmethod
     def visit_row(cls, node, children):
-        """ row_value (', ' row_value)* """
-        return children
+        """ (word SP+)? '{ ' val (SP+ val)* ' }' EOL """
+        alias = children.results.get('word')
+        alias = alias[0] if alias else None
+        return { 'alias': alias, 'row': children.results['val'] }
 
     @classmethod
     def visit_brace_val(cls, node, children):
