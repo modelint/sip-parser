@@ -9,8 +9,8 @@ import logging.config
 import sys
 import argparse
 from pathlib import Path
-from si_parser import version
-from si_parser.parser import SIParser
+from sip_parser import version
+from sip_parser.parser import SIParser
 
 _logpath = Path("si_parser.log")
 

@@ -1,7 +1,7 @@
 """ parser.py – Initial instance parser """
 
-from si_parser.exceptions import SIGrammarFileOpen, SIInputFileOpen, SIInputFileEmpty, SIParseError
-from si_parser.visitor import ScenarioVisitor, Scenario
+from sip_parser.exceptions import SIGrammarFileOpen, SIInputFileOpen, SIInputFileEmpty, SIParseError
+from sip_parser.visitor import ScenarioVisitor, Scenario
 from arpeggio import visit_parse_tree, NoMatch
 from arpeggio.cleanpeg import ParserPEG
 import os
@@ -30,7 +30,7 @@ class SIParser:
 
     # Useful paths within the project
     src_path = Path(__file__).parent.parent  # Path to src folder
-    module_path = src_path / 'si_parser'
+    module_path = src_path / 'sip_parser'
     grammar_path = module_path  # The grammar files are all here
     cwd = Path.cwd()
     diagnostics_path = cwd / 'diagnostics'  # All parser diagnostic output goes here
