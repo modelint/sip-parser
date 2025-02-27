@@ -54,11 +54,19 @@ class ScenarioVisitor(PTNodeVisitor):
         return children[0]
 
     @classmethod
-    def visit_rnum_list(cls, node, children):
-        """ rnum (', ' rnum)* """
+    def visit_ref_list(cls, node, children):
+        """ ref (', ' ref)* """
         # items = {k: v for d in children for k, v in d.items()}
         # return items
         return children
+
+    @classmethod
+    def visit_ref(cls, node, children):
+        """ rnum '>' icaps_name """
+        # items = {k: v for d in children for k, v in d.items()}
+        # return items
+        return {'rnum': children[0], 'to class':children[1]}
+
 
     @classmethod
     def visit_instance_block(cls, node, children):

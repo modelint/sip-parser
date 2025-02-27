@@ -1,7 +1,7 @@
 scenario : Simple Elevator
 --
 Shaft
-ID | In service | R1
+ID | In service | R1>Bank
 --
 { [S1] [true] @L }
 { [S2] [true] @L }
@@ -84,21 +84,21 @@ FP1  { [Freight]      [P1] }
 FP2  { [Freight]      [P2] }
 --
 Top Bank Level
-R38, R5 | Calling down
+R38>Bank Level, R5>Bank | Calling down
 --
-{ @PPH [false] }
-{ @LF7 [false] }
-{ @FPH [false] }
+{ @PPH @P [false] }
+{ @LF7 @L [false] }
+{ @FPH @F [false] }
 --
 Bottom Bank Level
-R38, R6 | Calling up
+R38>Bank Level, R6>Bank | Calling up
 --
-{ @PP1  [false] }
-{ @LFP2 [false] }
-{ @FP2  [false] }
+{ @PP1  @P [false] }
+{ @LFP2 @L [false] }
+{ @FP2  @F [false] }
 --
 Middle Bank Level
-R38 | Calling down | Calling up
+R38>Bank Level | Calling down | Calling up
 --
 { @P8   [false] [false] }
 { @PL   [false] [false] }
