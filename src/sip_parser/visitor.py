@@ -4,7 +4,7 @@ from arpeggio import PTNodeVisitor
 from collections import namedtuple
 
 Scenario = namedtuple('Scenario', 'name classes')
-ClassModelPopulation = namedtuple('ClassModelPopulation', 'attr_names refs population')
+ClassModelPopulation = namedtuple('ClassModelPopulation', 'header population')
 
 class ScenarioVisitor(PTNodeVisitor):
 
@@ -21,10 +21,10 @@ class ScenarioVisitor(PTNodeVisitor):
         it = iter(children[1:])  # Create an iterator and then zip it to get non-overlapping list element pairs
         for c, i in zip(it, it):
             cname = c[0]
-            attrs = c[1]['attr']
-            refs = c[1]['refs']
+            header = c[1]
+            # refs = c[1]['refs']
             pop = list(i['instances'])
-            cdict[cname] = ClassModelPopulation(attr_names=attrs, refs=refs, population=pop)
+            cdict[cname] = ClassModelPopulation(header=header, population=pop)
         return Scenario(name=scenario_name, classes=cdict)
 
     @classmethod
@@ -40,11 +40,12 @@ class ScenarioVisitor(PTNodeVisitor):
     @classmethod
     def visit_class_attrs(cls, node, children):
         """ col_name (' | ' col_name)* block_end """
-        attrs = [c for c in children if isinstance(c, str)]
-        refs = next((c for c in children if isinstance(c, list)), None)
-        items = {"attr": attrs, "refs": refs}
+        # attrs = [c for c in children if isinstance(c, str)]
+        # refs = next((c for c in children if isinstance(c, list)), None)
+        # items = {"attr": attrs, "refs": refs}
+        return children
 
-        return items
+        # return items
 
     @classmethod
     def visit_col_name(cls, node, children):
