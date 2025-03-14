@@ -81,7 +81,13 @@ class ScenarioVisitor(PTNodeVisitor):
         """ (word SP+)? '{ ' val (SP+ val)* ' }' EOL """
         alias = children.results.get('word')
         alias = alias[0] if alias else None
-        return { 'alias': alias, 'row': children.results['val'] }
+        initial_state = None if not children.results.get('initial_state') else children.results['initial_state']
+        return { 'alias': alias, 'row': children.results['val'], 'initial_state': initial_state}
+
+    @classmethod
+    def visit_initial_state(cls, node, children):
+        """ SP rnum? '>' SP state_name """
+        return children
 
     @classmethod
     def visit_brace_val(cls, node, children):
@@ -99,10 +105,10 @@ class ScenarioVisitor(PTNodeVisitor):
         return children[0]
 
     @classmethod
-    def visit_class_name(cls, node, children):
+    def visit_state_name(cls, node, children):
         """ icaps_name """
-        return children[0]
-        # return { 'class': children[0] }
+        name = ''.join(children)
+        return name
 
     @classmethod
     def visit_icaps_name(cls, node, children):
