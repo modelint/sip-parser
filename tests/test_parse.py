@@ -5,7 +5,7 @@ from pathlib import Path
 from sip_parser.parser import SIParser
 
 scenarios = [
-    "elevator",
+    "EVMAN_three_bank1",
 ]
 
 @pytest.mark.parametrize("pop", scenarios)

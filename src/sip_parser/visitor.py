@@ -81,7 +81,7 @@ class ScenarioVisitor(PTNodeVisitor):
         """ (word SP+)? '{ ' val (SP+ val)* ' }' EOL """
         alias = children.results.get('word')
         alias = alias[0] if alias else None
-        initial_state = None if not children.results.get('initial_state') else children.results['initial_state']
+        initial_state = [] if not children.results.get('initial_state') else children.results['initial_state']
         return { 'alias': alias, 'row': children.results['val'], 'initial_state': initial_state}
 
     @classmethod

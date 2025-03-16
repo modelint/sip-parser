@@ -1,14 +1,21 @@
-scenario : Simple Elevator
+scenario : Three Bank1
 --
-Shaft
-ID | In service | R1>Bank
+Bank
+Name | Passenger load time | Block clear time | Max close attempts | Average cabin speed | Average stop duration
 --
-{ [S1] [true] @L } R53> NO TRANSFER > IDLE
-{ [S2] [true] @L } R53> NO TRANSFER > IDLE
-{ [S3] [true] @L } R53> NO TRANSFER > IDLE
-{ [S4] [true] @P } R53> NO TRANSFER > IDLE
-{ [S5] [true] @P } R53> NO TRANSFER > IDLE
-{ [S6] [true] @F } R53> NO TRANSFER > IDLE
+L { [Lower Floors]     [4.0] [2.0] [25] [7.0] [9.0] }
+P { [Penthouse] [4.0] [2.0] [25] [7.0] [9.0] }
+F { [Freight]   [7.0] [5.0] [25] [5.0] [14.0] }
+--
+Cabin
+Shaft | Travel direction | Current floor
+--
+{ [S1] [.up]   [3]  } > PICKUP DROPOFF
+{ [S2] [.down] [PH] } > PICKUP DROPOFF
+{ [S3] [.up]   [L]  } > PICKUP DROPOFF
+{ [S4] [.down] [5]  } > PICKUP DROPOFF
+{ [S5] [.down] [L]  } > PICKUP DROPOFF
+{ [S6] [.up]   [5]  } > PICKUP DROPOFF
 --
 Door
 Shaft | Close attempts | Lock requested | Held | Blocked | Emergency hold
@@ -20,22 +27,15 @@ Shaft | Close attempts | Lock requested | Held | Blocked | Emergency hold
 { [S5] [0] [false] [false] [false] [false] } > CLOSED
 { [S6] [0] [false] [false] [false] [false] } > CLOSED
 --
-Bank
-Name | Passenger load time | Block clear time | Max close attempts | Average cabin speed | Average stop duration
+Shaft
+ID | In service | R1>Bank
 --
-L { [Lower]     [4.0] [2.0] [25] [7.0] [9.0] }
-P { [Penthouse] [4.0] [2.0] [25] [7.0] [9.0] }
-F { [Freight]   [7.0] [5.0] [25] [5.0] [14.0] }
---
-Cabin
-Shaft | Travel direction | Current floor | _state
---
-{ [S1] [.up]   [L]  } > PICKUP DROPOFF
-{ [S2] [.down] [2]  } > PICKUP DROPOFF
-{ [S3] [.up]   [G1] } > PICKUP DROPOFF
-{ [S4] [.down] [P]  } > PICKUP DROPOFF
-{ [S5] [.up]   [L]  } > PICKUP DROPOFF
-{ [S6] [.down] [7]  } > PICKUP DROPOFF
+{ [S1] [true] @L } R53> NO TRANSFER > IDLE
+{ [S2] [true] @L } R53> NO TRANSFER > IDLE
+{ [S3] [true] @L } R53> NO TRANSFER > IDLE
+{ [S4] [true] @P } R53> NO TRANSFER > IDLE
+{ [S5] [true] @P } R53> NO TRANSFER > IDLE
+{ [S6] [true] @F } R53> NO TRANSFER > IDLE
 --
 Floor
 Name | Height
@@ -84,25 +84,24 @@ FP1  { [Freight]      [P1] }
 FP2  { [Freight]      [P2] }
 --
 Top Bank Level
-R38>Bank Level, R5>Bank | Calling down
+R38>Bank Level | Calling down
 --
-{ @PPH @P [false] }
-{ @LF7 @L [false] }
-{ @FPH @F [false] }
+{ @PPH [false] }
+{ @LF7 [false] }
+{ @FPH [false] }
 --
 Bottom Bank Level
-R38>Bank Level, R6>Bank | Calling up
+R38>Bank Level | Calling up
 --
-{ @PP1  @P [false] }
-{ @LFP2 @L [false] }
-{ @FP2  @F [false] }
+{ @PP1  [false] }
+{ @LFP2 [false] }
+{ @FP2  [false] }
 --
 Middle Bank Level
 R38>Bank Level | Calling down | Calling up
 --
 { @P8   [false] [false] }
 { @PL   [false] [false] }
-{ @PP1  [false] [false] }
 { @LF6  [false] [false] }
 { @LF5  [false] [false] }
 { @LF4  [false] [false] }
@@ -150,9 +149,9 @@ Shaft | Floor
 { [S2] [4] }
 { [S2] [3] }
 { [S2] [2] }
-{ [S2] [S1] }
+{ [S2] [1] }
 { [S2] [L] }
-{ [S2] [PS1] }
+{ [S2] [P1] }
 { [S2] [P2] }
 { [S3] [PH] }
 { [S3] [8] }
@@ -172,7 +171,7 @@ Shaft | Floor
 { [S4] [6] }
 { [S4] [5] }
 { [S4] [4] }
-{ [S4] [S3] }
+{ [S4] [3] }
 { [S4] [2] }
 { [S4] [1] }
 { [S4] [L] }
@@ -194,7 +193,7 @@ Shaft | Floor
 { [S6] [8] }
 { [S6] [7] }
 { [S6] [6] }
-{ [S6] [S5] }
+{ [S6] [5] }
 { [S6] [4] }
 { [S6] [3] }
 { [S6] [2] }
